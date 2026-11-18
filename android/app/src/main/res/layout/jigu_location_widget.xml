@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android" android:id="@+id/location_widget_root" android:layout_width="match_parent" android:layout_height="match_parent" android:orientation="vertical" android:padding="9dp" android:background="@drawable/jigu_widget_background">
+<TextView android:layout_width="match_parent" android:layout_height="wrap_content" android:padding="8dp" android:background="@drawable/jigu_widget_glass" android:text="JIGU  ·  Your person's place" android:textColor="#382C44" android:textSize="15sp"/>
+<ImageView android:id="@+id/location_map" android:layout_width="match_parent" android:layout_height="0dp" android:layout_weight="1" android:layout_marginTop="6dp" android:scaleType="fitCenter" android:contentDescription="Partner's latest shared place on the map"/>
+<LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content" android:layout_marginTop="5dp" android:padding="8dp" android:orientation="vertical" android:background="@drawable/jigu_widget_glass">
+<TextView android:id="@+id/location_age" android:layout_width="match_parent" android:layout_height="wrap_content" android:text="No location shared yet" android:textColor="#526A57" android:textSize="13sp"/>
+<TextView android:layout_width="match_parent" android:layout_height="wrap_content" android:text="&#169; OpenStreetMap contributors" android:textColor="#796F7C" android:textSize="9sp"/>
+</LinearLayout>
+</LinearLayout>

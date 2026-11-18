@@ -1,0 +1,54 @@
+{
+  "moment": {
+    "title": "A little moment for you",
+    "body": "Your person shared a photo. Open your space to see it."
+  },
+  "date_invitation": {
+    "title": "A little invitation, just for you",
+    "body": "Your person has planned a date. Open Jigu to unfold your invitation."
+  },
+  "date_24h": {
+    "title": "Tomorrow belongs to you two",
+    "body": "Your date is in 24 hours. A little time together is almost here."
+  },
+  "date_6h": {
+    "title": "Six hours until a little more us",
+    "body": "Your date is getting closer. Open Jigu for your lovely plan."
+  },
+  "date_1h": {
+    "title": "One hour until your date",
+    "body": "Time to get ready for your person. Your invitation is waiting in Jigu."
+  },
+  "date_accepted": {
+    "title": "It's a date!",
+    "body": "Your person said yes to your invitation. Open Jigu to see your plan together."
+  },
+  "date_declined": {
+    "title": "Another time together",
+    "body": "Your person cannot make this date. Open Jigu to plan a new little moment."
+  },
+  "anniversary_1month": {
+    "title": "One month until your favourite us-day",
+    "body": "A whole chapter together deserves a little celebration. Shall we plan something lovely?"
+  },
+  "anniversary_15days": {
+    "title": "Fifteen days. A thousand little memories.",
+    "body": "Your anniversary is getting closer. Save a little time for the person who makes ordinary days special."
+  },
+  "anniversary_5days": {
+    "title": "Five days until another year of us",
+    "body": "A note, a flower, a favourite place. The smallest plans can hold the biggest love."
+  },
+  "anniversary_3days": {
+    "title": "Three sleeps until your love-day",
+    "body": "Your anniversary is almost here. A little surprise and a little time together?"
+  },
+  "anniversary_24h": {
+    "title": "Tomorrow, we celebrate us",
+    "body": "Your anniversary is one day away. Here is to every moment that brought you here."
+  },
+  "anniversary_12h": {
+    "title": "Twelve hours until your next chapter",
+    "body": "Your anniversary morning is almost here. Keep a little love ready for your favourite person."
+  }
+}

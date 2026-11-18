@@ -1,0 +1,48 @@
+{
+  "project_info": {
+    "project_number": "816054990298",
+    "project_id": "fir-faaa3",
+    "storage_bucket": "fir-faaa3.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:816054990298:android:05ebc00986cc619ae47ce3",
+        "android_client_info": {
+          "package_name": "com.sanjaya.jigu"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyD7kBNnTaDAN_c9C2dOdPYZ9Dh1qKIEEFU"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:816054990298:android:20a5d69f5c94826ee47ce3",
+        "android_client_info": {
+          "package_name": "com.sanjaya.jigulove"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyD7kBNnTaDAN_c9C2dOdPYZ9Dh1qKIEEFU"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

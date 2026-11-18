@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android" android:layout_width="match_parent" android:layout_height="match_parent" android:padding="3dp" android:background="@drawable/jigu_widget_background">
+<ImageView android:id="@+id/moment_image" android:layout_width="match_parent" android:layout_height="match_parent" android:contentDescription="Our shared moment. Tap to open Jigu" android:scaleType="centerCrop"/>
+<ImageView android:id="@+id/moment_frost" android:layout_width="match_parent" android:layout_height="56dp" android:layout_gravity="bottom" android:layout_margin="8dp" android:scaleType="fitXY" android:contentDescription=""/>
+<ImageView android:layout_width="match_parent" android:layout_height="86dp" android:layout_gravity="bottom" android:background="@drawable/jigu_widget_photo_scrim" android:contentDescription=""/>
+<LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content" android:layout_gravity="bottom" android:layout_margin="8dp" android:gravity="center_vertical" android:padding="4dp" android:background="@drawable/jigu_widget_glass">
+<TextView android:id="@+id/photo_previous" android:layout_width="48dp" android:layout_height="48dp" android:gravity="center" android:text="&#x2039;" android:textSize="32sp" android:textColor="#382C44" android:contentDescription="Previous moment"/>
+<TextView android:id="@+id/photo_count" android:layout_width="0dp" android:layout_weight="1" android:layout_height="wrap_content" android:gravity="center" android:text="Jigu moments" android:textColor="#382C44" android:textSize="13sp"/>
+<TextView android:id="@+id/photo_next" android:layout_width="48dp" android:layout_height="48dp" android:gravity="center" android:text="&#x203A;" android:textSize="32sp" android:textColor="#382C44" android:contentDescription="Next moment"/>
+</LinearLayout></FrameLayout>

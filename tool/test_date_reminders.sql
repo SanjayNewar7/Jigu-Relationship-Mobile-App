@@ -1,0 +1,31 @@
+begin;
+do $test$
+declare a uuid;b uuid;c uuid;d uuid:=gen_random_uuid();blocked boolean:=false;n integer;
+begin
+ select id,person_a,person_b into c,a,b from public.couples where person_b is not null limit 1;
+ if c is null then raise exception 'Pair required for rollback test';end if;
+ perform set_config('request.jwt.claim.sub',a::text,true);
+ execute 'set local role authenticated';
+ insert into public.date_invitations(id,couple_id,creator_id,starts_at,venue,address,dress_style) values(d,c,a,now()+interval '2 days','Rollback test','','Casual');
+ begin perform public.complete_date(d); exception when others then blocked:=true;end;
+ if not blocked then raise exception 'Future date completed';end if;
+ execute 'reset role';
+ select count(*) into n from public.date_notifications where invitation_id=d;
+ if n<>7 then raise exception 'Expected one invitation and six reminders, got %',n;end if;
+ if exists(select 1 from public.date_notifications q join public.date_invitations i on i.id=q.invitation_id where q.invitation_id=d and q.kind='24h' and q.due_at<>i.starts_at-interval '24 hours') then raise exception 'Wrong reminder time';end if;
+ execute 'set local role authenticated';
+ perform set_config('request.jwt.claim.sub',b::text,true);
+ perform public.respond_to_date(d,'accepted');
+ execute 'reset role';
+ update public.date_invitations set starts_at=now()-interval '1 hour' where id=d;
+ execute 'set local role authenticated';
+ perform public.complete_date(d);
+ if not exists(select 1 from public.date_invitations where id=d and status='completed' and completed_at is not null) then raise exception 'Completion failed';end if;
+ execute 'reset role';
+ if exists(select 1 from public.date_notifications where invitation_id=d and delivered_at is null) then raise exception 'Completion retained reminders';end if;
+ execute 'set local role authenticated';
+ perform public.leave_couple();
+ if exists(select 1 from public.date_invitations where id=d) then raise exception 'Left member can read memory';end if;
+end $test$;
+reset role;
+rollback;
