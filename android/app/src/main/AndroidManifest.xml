@@ -12,6 +12,11 @@
     <uses-permission android:name="android.permission.MODIFY_AUDIO_SETTINGS"/>
     <uses-permission android:name="android.permission.FOREGROUND_SERVICE_MICROPHONE"/>
     <uses-feature android:name="android.hardware.camera" android:required="false"/>
+    <uses-feature android:name="android.hardware.camera.autofocus" android:required="false"/>
+    <!-- Text chat, gallery moments and journals work without a microphone. -->
+    <uses-feature android:name="android.hardware.microphone" android:required="false"/>
+    <!-- Headset routing is optional; calls also use the phone speaker/earpiece. -->
+    <uses-feature android:name="android.hardware.bluetooth" android:required="false"/>
     <application
         android:label="Jigu"
         android:name="${applicationName}"

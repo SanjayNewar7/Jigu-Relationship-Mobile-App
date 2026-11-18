@@ -1,4 +1,3 @@
-import 'dart:io';
 import 'dart:typed_data';
 import 'package:flutter/material.dart';
 import 'package:pro_image_editor/pro_image_editor.dart';
@@ -6,6 +5,8 @@ import 'controllers/caption_gesture_gate.dart';
 import 'models/rich_caption.dart';
 import 'rich_caption_page.dart';
 import 'widgets/snap_editor_toolbar.dart';
+import 'botanical_filter_page.dart';
+import 'widgets/discard_moment_dialog.dart';
 
 /// Local, non-destructive editing. Nothing uploads until the user confirms.
 class MomentEditorPage extends StatefulWidget {
@@ -20,6 +21,7 @@ class _MomentEditorPageState extends State<MomentEditorPage> {
   final editorKey = GlobalKey<ProImageEditorState>();
   final captionGesture = CaptionGestureGate();
   Uint8List? result;
+  Uint8List? filteredPhoto;
   bool editingCaption = false;
   Future<void> caption(
     ProImageEditorState editor, [
@@ -33,6 +35,7 @@ class _MomentEditorPageState extends State<MomentEditorPage> {
         MaterialPageRoute(
           builder: (_) => RichCaptionPage(
             path: widget.path,
+            photo: filteredPhoto,
             initial: metadata is Map
                 ? RichCaption.fromMap(Map<String, dynamic>.from(metadata))
                 : null,
@@ -68,76 +71,91 @@ class _MomentEditorPageState extends State<MomentEditorPage> {
   }
 
   @override
-  Widget build(BuildContext context) => ProImageEditor.file(
-    File(widget.path),
-    key: editorKey,
-    callbacks: ProImageEditorCallbacks(
-      mainEditorCallbacks: MainEditorCallbacks(
-        onLayerTapDown: (layer) {
-          captionGesture.begin(
-            layer.id, layer.offset, layer.scale, layer.rotation,
-          );
-        },
-        onScaleUpdate: captionGesture.update,
-        onLayerTapUp: (layer) {
-          final editor = editorKey.currentState;
-          final wasTap = captionGesture.end(
-            layer.id, layer.offset, layer.scale, layer.rotation,
-          );
-          if (wasTap &&
-              layer is WidgetLayer &&
-              layer.meta?['jigu_caption'] != null &&
-              editor != null) {
-            caption(editor, layer);
-          }
-        },
-      ),
-      onImageEditingComplete: (Uint8List bytes) async {
-        result = bytes;
-      },
-      onCloseEditor: (_) {
-        if (mounted) Navigator.pop(context, result);
-      },
-    ),
-    configs: ProImageEditorConfigs(
-      designMode: ImageEditorDesignMode.cupertino,
-      mainEditor: MainEditorConfigs(
-        tools: [
-          SubEditorMode.text,
-          SubEditorMode.emoji,
-          SubEditorMode.paint,
-          SubEditorMode.cropRotate,
-        ],
-        widgets: MainEditorWidgets(
-          appBar: (editor, stream) => null,
-          bottomBar: (editor, stream, key) => null,
-          bodyItems: (editor, stream) => [
-            ReactiveWidget(
-              stream: stream,
-              builder: (_) => SnapEditorToolbar(
-                editor: editor,
-                onCaption: () => caption(editor),
+  Widget build(BuildContext context) => filteredPhoto == null
+      ? BotanicalFilterPage(
+          path: widget.path,
+          onContinue: (bytes) => setState(() => filteredPhoto = bytes),
+        )
+      : ProImageEditor.memory(
+          filteredPhoto!,
+          key: editorKey,
+          callbacks: ProImageEditorCallbacks(
+            mainEditorCallbacks: MainEditorCallbacks(
+              onLayerTapDown: (layer) {
+                captionGesture.begin(
+                  layer.id,
+                  layer.offset,
+                  layer.scale,
+                  layer.rotation,
+                );
+              },
+              onScaleUpdate: captionGesture.update,
+              onLayerTapUp: (layer) {
+                final editor = editorKey.currentState;
+                final wasTap = captionGesture.end(
+                  layer.id,
+                  layer.offset,
+                  layer.scale,
+                  layer.rotation,
+                );
+                if (wasTap &&
+                    layer is WidgetLayer &&
+                    layer.meta?['jigu_caption'] != null &&
+                    editor != null) {
+                  caption(editor, layer);
+                }
+              },
+            ),
+            onImageEditingComplete: (Uint8List bytes) async {
+              result = bytes;
+            },
+            onCloseEditor: (_) {
+              if (mounted) Navigator.pop(context, result);
+            },
+          ),
+          configs: ProImageEditorConfigs(
+            designMode: ImageEditorDesignMode.cupertino,
+            mainEditor: MainEditorConfigs(
+              tools: [
+                SubEditorMode.text,
+                SubEditorMode.emoji,
+                SubEditorMode.paint,
+                SubEditorMode.cropRotate,
+              ],
+              widgets: MainEditorWidgets(
+                closeWarningDialog: (_) => confirmDiscardMoment(context),
+                appBar: (editor, stream) => null,
+                bottomBar: (editor, stream, key) => null,
+                bodyItems: (editor, stream) => [
+                  ReactiveWidget(
+                    stream: stream,
+                    builder: (_) => SnapEditorToolbar(
+                      editor: editor,
+                      onCaption: () => caption(editor),
+                    ),
+                  ),
+                ],
               ),
             ),
-          ],
-        ),
-      ),
-      layerInteraction: const LayerInteractionConfigs(
-        enableMobilePinchScale: true,
-        enableMobilePinchRotate: true,
-      ),
-      textEditor: const TextEditorConfigs(
-        customTextStyles: [
-          TextStyle(fontFamily: 'Sniglet'),
-          TextStyle(fontFamily: 'sans-serif', fontWeight: FontWeight.w700),
-          TextStyle(fontFamily: 'serif', fontStyle: FontStyle.italic),
-        ],
-      ),
-      imageGeneration: const ImageGenerationConfigs(
-        outputFormat: OutputFormat.jpg,
-        maxOutputSize: Size(2560, 2560),
-        jpegQuality: 95,
-      ),
-    ),
-  );
+            layerInteraction: const LayerInteractionConfigs(
+              enableMobilePinchScale: true,
+              enableMobilePinchRotate: true,
+            ),
+            textEditor: const TextEditorConfigs(
+              customTextStyles: [
+                TextStyle(fontFamily: 'Sniglet'),
+                TextStyle(
+                  fontFamily: 'sans-serif',
+                  fontWeight: FontWeight.w700,
+                ),
+                TextStyle(fontFamily: 'serif', fontStyle: FontStyle.italic),
+              ],
+            ),
+            imageGeneration: const ImageGenerationConfigs(
+              outputFormat: OutputFormat.jpg,
+              maxOutputSize: Size(2560, 2560),
+              jpegQuality: 95,
+            ),
+          ),
+        );
 }

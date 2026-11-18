@@ -6,8 +6,14 @@ import 'models/rich_caption.dart';
 import 'controllers/rich_caption_controller.dart';
 
 class RichCaptionPage extends StatefulWidget {
-  const RichCaptionPage({super.key, required this.path, this.initial});
+  const RichCaptionPage({
+    super.key,
+    required this.path,
+    this.initial,
+    this.photo,
+  });
   final String path;
+  final Uint8List? photo;
   final RichCaption? initial;
   @override
   State<RichCaptionPage> createState() => _RichCaptionPageState();
@@ -54,7 +60,9 @@ class _RichCaptionPageState extends State<RichCaptionPage> {
         Positioned.fill(
           child: Opacity(
             opacity: .5,
-            child: Image.file(File(widget.path), fit: BoxFit.contain),
+            child: widget.photo == null
+                ? Image.file(File(widget.path), fit: BoxFit.contain)
+                : Image.memory(widget.photo!, fit: BoxFit.contain),
           ),
         ),
         SafeArea(
